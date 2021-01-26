@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTextViewNanumR" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">@font/nanumregular</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="CustomTextViewNanumB" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">@font/nanumbold</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="CustomTextViewNanumEB" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">@font/nanumebold</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+</resources>
