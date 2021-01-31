@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.chanho.basic.model.StoreInfo
 import com.chanho.basic.repository.Repository
 
+
 class MainViewModel
 @ViewModelInject
     constructor(private val repository: Repository):ViewModel() {

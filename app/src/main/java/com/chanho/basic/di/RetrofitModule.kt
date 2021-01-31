@@ -1,5 +1,6 @@
 package com.chanho.basic.di
 
+import com.chanho.basic.retrofit.RetrofitNaverService
 import com.chanho.basic.retrofit.RetrofitService
 import dagger.Module
 import dagger.Provides
@@ -15,49 +16,57 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object RetrofitModule {
+    val NAVER_URL = "https://openapi.naver.com/v1/search/"
     val BASE_URL =
         "https://gist.githubusercontent.com/junsuk5/bb7485d5f70974deee920b8f0cd1e2f0/raw/063f64d9b343120c2cb01a6555cf9b38761b1d94/"
 
-    @Singleton
-    @Provides
-    fun provideOkHttpClientBuilder():OkHttpClient.Builder{
-        return OkHttpClient.Builder()
-            .addInterceptor{chain ->
-                val original = chain.request()
-                val request = original.newBuilder()
-                    .addHeader("Content-Type", "application/json")
-                    .method(original.method, original.body)
-                    .build()
-                chain.proceed(request)
-        }
-    }
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(builder :OkHttpClient.Builder) : OkHttpClient {
-        return builder
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS).build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit.Builder{
+    fun provideRetrofitService(): RetrofitService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(okHttpClient)
+            .client(OkHttpClient.Builder()
+                .addInterceptor { chain ->
+                    val original = chain.request()
+                    val request = original.newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .method(original.method, original.body)
+                        .build()
+                    chain.proceed(request)
+                }
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS).build())
+            .build()
+            .create(RetrofitService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideRetrofitService(retrofit:Retrofit.Builder):RetrofitService{
-        return retrofit
+    fun provideRetrofitNaverMovieService(): RetrofitNaverService {
+        return Retrofit.Builder()
+            .baseUrl(NAVER_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(OkHttpClient.Builder()
+                .addInterceptor { chain ->
+                    val original = chain.request()
+                    val request = original.newBuilder()
+                        .addHeader("Content-Type", "application/json")
+//                        .addHeader("X-Naver-Client-Id", "N3cjLNXB3GXIx_nWaxvC")
+//                        .addHeader("X-Naver-Client-Secret", "XSXbXZCxXg")
+                        .method(original.method, original.body)
+                        .build()
+                    chain.proceed(request)
+                }
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS).build())
             .build()
-            .create(RetrofitService::class.java)
-
+            .create(RetrofitNaverService::class.java)
     }
 
 
