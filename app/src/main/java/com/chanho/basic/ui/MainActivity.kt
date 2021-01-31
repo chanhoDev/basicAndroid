@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import com.chanho.basic.databinding.ActivityMainBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,19 +24,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
-    private lateinit var binding :ActivityMainBinding
-    private val adapter by lazy {
-        MainAdapter(viewModel)
-    }
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        binding.recyclerview.adapter = adapter
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        adapter = MainAdapter(viewModel)
+        binding.recyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        binding.recyclerview.adapter = adapter
+        onObserve()
+
 
         val permissionlistener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
             .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
             .check()
-        onObserve()
     }
 
-    private fun onObserve(){
+
+    private fun onObserve() {
         viewModel.storeInfo.observe(this) {
             adapter.deleteItems()
             adapter.setItems(it.stores)
@@ -73,18 +73,18 @@ class MainActivity : AppCompatActivity() {
     private fun performAction() {
         fusedLocationClient?.let {
             it.lastLocation
-            .addOnFailureListener(this,
-                OnFailureListener { e: Exception ->
-                    Log.e(
-                        TAG,
-                        "performAction: ",
-                        e.cause
-                    )
-                }
-            )
-            .addOnSuccessListener(
-                this,
-                OnSuccessListener<Location> { location: Location? ->
+                .addOnFailureListener(this,
+                    OnFailureListener { e: Exception ->
+                        Log.e(
+                            TAG,
+                            "performAction: ",
+                            e.cause
+                        )
+                    }
+                )
+                .addOnSuccessListener(
+                    this
+                ) { location: Location? ->
                     Log.d(TAG, "performAction: $location")
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
@@ -99,14 +99,15 @@ class MainActivity : AppCompatActivity() {
                         location.latitude = 37.188078
                         location.longitude = 127.043002
                         viewModel.location = location
-                        viewModel.fetchStoreInfo()
+                        viewModel.fetchStoreInfo(true)
+                    } else {
+                        viewModel.fetchStoreInfo(false)
                     }
                 }
-            )
         }
     }
 
-    companion object{
+    companion object {
         val TAG = MainActivity::class.java.simpleName
     }
 

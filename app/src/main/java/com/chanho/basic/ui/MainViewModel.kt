@@ -9,8 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chanho.basic.model.StoreInfo
 import com.chanho.basic.repository.Repository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class MainViewModel
 @ViewModelInject
@@ -22,8 +20,17 @@ class MainViewModel
     val storeInfo :LiveData<StoreInfo> = _storeInfo
 
     @SuppressLint("CheckResult")
-    fun fetchStoreInfo(){
-        repository.getFetchStoreInfo(location.latitude,location.longitude)
+    fun fetchStoreInfo(isLocation:Boolean){
+        var lat:Double
+        var lon:Double
+        if(isLocation){
+            lat = location.latitude
+            lon = location.longitude
+        }else{
+            lat = 37.188078
+            lon = 127.043002
+        }
+        repository.getFetchStoreInfo(lat,lon)
             .subscribe({response->
                 if(response.isSuccessful){
                     _storeInfo.value=response.body()
