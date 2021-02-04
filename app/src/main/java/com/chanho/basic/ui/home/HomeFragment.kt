@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chanho.basic.R
 import com.chanho.basic.databinding.FragmentHomeBinding
 import com.chanho.basic.ui.main.Main2ViewModel
+import com.chanho.basic.util.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -39,25 +40,63 @@ class HomeFragment : Fragment() {
             false
         )
         binding.lifecycleOwner = this
+        binding.vm = viewModel
         onObserve()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        binding.homeRecyclerview.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.homeRecyclerview.layoutManager = linearLayoutManager
         binding.homeRecyclerview.adapter = adapter
+        binding.homeRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+//                sharedViewModel.bottomNavigationVisible.value?.let { isVisible ->
+//                    if ((dy < 0 || dy > 0) && isVisible) {
+//                        sharedViewModel.setBottomNavigationVisible(!isVisible)
+//                    }
+//                }
+                viewModel.homeSearchLayoutVisible.value?.let { isVisible ->
+                    if ((dx < 0 || dy > 0) && isVisible) {
+                        viewModel.setHomeSearchLayoutVisible(!isVisible)
+                    }
+                }
+            }
 
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        sharedViewModel.setBottomNavigationVisible(true)
+                        viewModel.setHomeSearchLayoutVisible(true)
+                    }
+                }
+            }
+        })
+        binding.homeRecyclerview.addOnScrollListener(object :
+            RecyclerViewScrollListener(RecyclerViewScrollListener.LoadMorePosition.TOP) {
+            override fun onLoadMore() {
+                viewModel.setMovieReqModel(false, true)
+            }
+
+            override fun onVisibleFirst() {
+            }
+        })
     }
 
     private fun onObserve() {
-//        viewModel.
-        sharedViewModel.movieList.observe(viewLifecycleOwner, {
+        viewModel.movieList.observe(viewLifecycleOwner) {
             Log.e("homeFragment!!", it.toString())
             adapter.onDeleteAll()
             adapter.onItemsAdd(it)
-        })
+        }
+        viewModel.loadMovieList.observe(viewLifecycleOwner) {
+            Log.e("loadmoreItem!!", it.toString())
+            adapter.onItemsAdd(it)
+        }
     }
+
 
     companion object {
         @JvmStatic

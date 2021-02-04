@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppSYTheme3" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorWhite</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="colorAccent">@color/color333333</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:statusBarColor">@color/colorWhite</item>
+    </style>
+
+</resources>

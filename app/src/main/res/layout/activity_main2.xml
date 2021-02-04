@@ -5,18 +5,24 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.chanho.basic.ui.main.Main2ViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black"
         tools:context=".ui.main.Main2Activity">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/home_viewpager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/home_bottom_navigationview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +31,8 @@
             android:id="@+id/home_bottom_navigationview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:itemBackground="@color/white"
+            app:itemBackground="@color/colorWhite"
+            app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
