@@ -1,8 +1,8 @@
 package com.chanho.basic.di
 
+import com.chanho.basic.repository.LocalDataSourceImpl
+import com.chanho.basic.repository.RemoteDataSourceImpl
 import com.chanho.basic.repository.Repository
-import com.chanho.basic.retrofit.RetrofitNaverService
-import com.chanho.basic.retrofit.RetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,9 +16,9 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideRepository(
-        retrofitService: RetrofitService,
-        retrofitNaverService: RetrofitNaverService
+        localDataSource: LocalDataSourceImpl,
+        remoteDataSource: RemoteDataSourceImpl
     ):Repository{
-        return Repository(retrofitService,retrofitNaverService)
+        return Repository(localDataSource,remoteDataSource)
     }
 }

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chanho.basic.R
 import com.chanho.basic.databinding.FragmentHomeBinding
-import com.chanho.basic.ui.main.Main2ViewModel
+import com.chanho.basic.ui.main.MainViewModel
 import com.chanho.basic.util.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private val viewModel: HomeViewModel by viewModels()
-    private val sharedViewModel: Main2ViewModel by activityViewModels()
+    private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentHomeBinding
     private val adapter: HomeAdapter by lazy {
         HomeAdapter(viewModel)

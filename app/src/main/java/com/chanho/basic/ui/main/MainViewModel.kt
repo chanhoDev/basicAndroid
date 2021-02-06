@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chanho.basic.repository.Repository
 
-class Main2ViewModel
+class MainViewModel
 @ViewModelInject
 constructor(private val repository: Repository) : ViewModel() {
 

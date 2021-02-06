@@ -13,16 +13,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.chanho.basic.R
-import com.chanho.basic.databinding.ActivityMain2Binding
+import com.chanho.basic.databinding.ActivityMainBinding
 import com.chanho.basic.ui.home.HomeFragment
 import com.chanho.basic.ui.setting.SettingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class Main2Activity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
-    private lateinit var binding: ActivityMain2Binding
-    private val viewModel: Main2ViewModel by viewModels()
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
     private val slideUpAnim by lazy {
         AnimationUtils.loadAnimation(this, R.anim.slide_up)
     }
@@ -33,7 +33,7 @@ class Main2Activity : AppCompatActivity(), BottomNavigationView.OnNavigationItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.vm = viewModel
         binding.homeViewpager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         binding.homeBottomNavigationview.setOnNavigationItemSelectedListener(this)

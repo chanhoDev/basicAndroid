@@ -9,59 +9,68 @@ import androidx.lifecycle.ViewModel
 import com.chanho.basic.model.Movie
 import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.repository.Repository
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel
-@ViewModelInject constructor(private val repository: Repository): ViewModel(){
+@ViewModelInject constructor(private val repository: Repository) : ViewModel() {
     private val _movieList = MutableLiveData<List<Movie>>()
-    val movieList : LiveData<List<Movie>> = _movieList
+    val movieList: LiveData<List<Movie>> = _movieList
 
     private val _loadMovieList = MutableLiveData<List<Movie>>()
-    val loadMovieList : LiveData<List<Movie>> = _loadMovieList
+    val loadMovieList: LiveData<List<Movie>> = _loadMovieList
 
     private val _homeSearchLayoutVisible = MutableLiveData(true)
-    val homeSearchLayoutVisible:LiveData<Boolean> = _homeSearchLayoutVisible
+    val homeSearchLayoutVisible: LiveData<Boolean> = _homeSearchLayoutVisible
 
     val searchText = MutableLiveData<String>()
 
-    private lateinit var reqMovieModel:MovieReqModel
+    private lateinit var reqMovieModel: MovieReqModel
 
-    fun setHomeSearchLayoutVisible(isVisible:Boolean){
+    init {
+        getSearchList()
+    }
+
+    fun setHomeSearchLayoutVisible(isVisible: Boolean) {
         _homeSearchLayoutVisible.value = isVisible
     }
 
-    fun setMovieReqModel(isSearch:Boolean,isLoadModer:Boolean){
-        if(isLoadModer){
-            reqMovieModel.start = (reqMovieModel.start.toInt()+(reqMovieModel.display.toInt())).toString()
-        }else if(isSearch){
+    fun setMovieReqModel(isSearch: Boolean, isLoadModer: Boolean) {
+        if (isLoadModer) {
+            reqMovieModel.start =
+                (reqMovieModel.start.toInt() + (reqMovieModel.display.toInt())).toString()
+        } else if (isSearch) {
             reqMovieModel = MovieReqModel()
             reqMovieModel.query = searchText.value.toString()
         }
         getNaverMovieList(isLoadModer)
     }
 
-    fun onSearchBtnClicked(){
-        if(searchText.value.isNullOrEmpty()){
-            searchText.value =searchText.value?.trim()
+    fun onSearchBtnClicked() {
+        if (searchText.value.isNullOrEmpty()) {
+            searchText.value = searchText.value?.trim()
         }
-        setMovieReqModel(true,false)
+        setMovieReqModel(true, false)
     }
 
     @SuppressLint("CheckResult")
-    fun getNaverMovieList(isLoadModer:Boolean) {
-        Log.e("reqModel",reqMovieModel.toString())
+    fun getNaverMovieList(isLoadModer: Boolean) {
+        Log.e("reqModel", reqMovieModel.toString())
         repository.getNaverMovieList(reqMovieModel)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 if (response.isSuccessful) {
 //                    Log.e("successful", response.body()?.items.toString())
                     response.body()?.items?.let {
-                        for(i in it){
-                            Log.e("movie = ",i.title.toString())
+                        for (i in it) {
+                            Log.e("movie = ", i.title.toString())
                         }
-                        Log.e("==========","======")
+                        Log.e("==========", "======")
                     }
-                    if(isLoadModer){
+                    if (isLoadModer) {
                         _loadMovieList.value = response.body()?.items
-                    }else{
+                    } else {
                         _movieList.value = response.body()?.items
                     }
                 } else {
@@ -70,5 +79,20 @@ class HomeViewModel
             }, { error ->
                 Log.e("fail", error.toString())
             })
+    }
+
+    @SuppressLint("CheckResult")
+    fun getSearchList() {
+        Observable.fromCallable {
+            repository.getSearchList()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                Log.e("listSearch", response.toString())
+            }, { error ->
+                Log.e("errorSearchList", error.toString())
+            })
+
     }
 }
