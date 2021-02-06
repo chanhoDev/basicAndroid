@@ -6,6 +6,7 @@ import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.model.MovieResModel
 import com.chanho.basic.room.MovieSearchEntity
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
@@ -13,21 +14,23 @@ class Repository
 constructor(
     private val localDataSource: LocalDataSourceImpl,
     private val remoteDataSource: RemoteDataSourceImpl
-) {
+) : RepositoryImpl {
 
     @SuppressLint("CheckResult")
-    fun getNaverMovieList(
+    override fun getNaverMovieList(
         reqModel: MovieReqModel
-    ):
-            Single<Response<MovieResModel>> {
+    ): Single<Response<MovieResModel>> {
         return remoteDataSource.onNaverMovieListCall(reqModel)
             .subscribeOn(Schedulers.io())
             .map {
                 if (it.isSuccessful) {
-                    if(reqModel.start=="1"){
-                        localDataSource.onMovieSearchInsertCall(MovieSearchEntity(reqModel.query))
-                            .subscribeOn(Schedulers.io())
-                            .subscribe()
+                    if (reqModel.start == "1") {
+                        getSearchList().subscribe({
+                            deleteAllSearch(reqModel.query)
+                            Log.e("resultNaverList", it.size.toString())
+                        }, {
+                            Log.e("searchlisterror", it.toString())
+                        })
                     }
                 } else {
                     Log.e("getNaverMovieListFAil ", it.body().toString())
@@ -35,8 +38,32 @@ constructor(
                 it
             }
     }
-    fun getSearchList(
-    ): List<MovieSearchEntity> {
-        return localDataSource.onMovieSearchHistoryCall()
+
+    override fun setMovieSearch(
+        query: String
+    ): Disposable {
+        return localDataSource.onMovieSearchInsertCall(MovieSearchEntity(query))
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
+
+
+    @SuppressLint("CheckResult")
+    override fun getSearchList(
+    ): Single<List<MovieSearchEntity>> {
+        return localDataSource.onMovieSearchGetCall()
+            .subscribeOn(Schedulers.io())
+    }
+
+
+    override fun deleteAllSearch(query: String): Disposable {
+        return localDataSource.onMovieSearchDeleteAllCall()
+            .subscribeOn(Schedulers.io()).subscribe({
+                setMovieSearch(query)
+            }, {
+                Log.e("error_deleteAll", it.toString())
+            })
+    }
+
+
 }

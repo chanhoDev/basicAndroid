@@ -83,6 +83,7 @@ class HomeFragment : Fragment() {
             override fun onVisibleFirst() {
             }
         })
+        viewModel.setSearchText()
     }
 
     private fun onObserve() {

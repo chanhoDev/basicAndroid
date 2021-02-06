@@ -1,7 +1,7 @@
 package com.chanho.basic.di
 
+import com.chanho.basic.BuildConfig
 import com.chanho.basic.retrofit.RetrofitNaverService
-import com.chanho.basic.retrofit.RetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,29 +23,6 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitService(): RetrofitService {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    val original = chain.request()
-                    val request = original.newBuilder()
-                        .addHeader("Content-Type", "application/json")
-                        .method(original.method, original.body)
-                        .build()
-                    chain.proceed(request)
-                }
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS).build())
-            .build()
-            .create(RetrofitService::class.java)
-    }
-
-    @Singleton
-    @Provides
     fun provideRetrofitNaverMovieService(): RetrofitNaverService {
         return Retrofit.Builder()
             .baseUrl(NAVER_URL)
@@ -56,8 +33,8 @@ object RetrofitModule {
                     val original = chain.request()
                     val request = original.newBuilder()
                         .addHeader("Content-Type", "application/json")
-                        .addHeader("X-Naver-Client-Id", "N3cjLNXB3GXIx_nWaxvC")
-                        .addHeader("X-Naver-Client-Secret", "XSXbXZCxXg")
+                        .addHeader("X-Naver-Client-Id", BuildConfig.NAVER_CLIENT_ID)
+                        .addHeader("X-Naver-Client-Secret", BuildConfig.NAGER_CLIENT_SECRETE)
                         .method(original.method, original.body)
                         .build()
                     chain.proceed(request)

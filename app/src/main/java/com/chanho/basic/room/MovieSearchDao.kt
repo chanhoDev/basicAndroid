@@ -1,20 +1,21 @@
 package com.chanho.basic.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Completable
+import io.reactivex.Single
 
 @Dao
 interface MovieSearchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(movieSearchEntity:MovieSearchEntity):Completable
+    fun insertMovieSearch(movieSearchEntity: MovieSearchEntity): Completable
 
     @Query("SELECT * FROM moviesearch")
-    fun get(): List<MovieSearchEntity>
+    fun getMovieSearch(): Single<List<MovieSearchEntity>>
 
     @Query("DELETE FROM movieSearch")
-    fun deleteAllMovieSearch()
+    fun deleteAllMovieSearch(): Completable
+
+    @Update
+    fun updateMovieSearch(movieSearchEntity: MovieSearchEntity): Completable
 }

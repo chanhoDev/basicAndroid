@@ -9,9 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.chanho.basic.model.Movie
 import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.repository.Repository
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel
 @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
@@ -28,8 +26,15 @@ class HomeViewModel
 
     private lateinit var reqMovieModel: MovieReqModel
 
-    init {
-        getSearchList()
+    @SuppressLint("CheckResult")
+    fun setSearchText() {
+        repository.getSearchList()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ movieSearch ->
+                searchText.value = movieSearch[0].search
+            }, {
+                Log.e("error", it.toString())
+            })
     }
 
     fun setHomeSearchLayoutVisible(isVisible: Boolean) {
@@ -81,18 +86,4 @@ class HomeViewModel
             })
     }
 
-    @SuppressLint("CheckResult")
-    fun getSearchList() {
-        Observable.fromCallable {
-            repository.getSearchList()
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                Log.e("listSearch", response.toString())
-            }, { error ->
-                Log.e("errorSearchList", error.toString())
-            })
-
-    }
 }
