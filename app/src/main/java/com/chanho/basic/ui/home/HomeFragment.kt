@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -43,6 +44,13 @@ class HomeFragment : Fragment() {
         binding.vm = viewModel
         onObserve()
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.run {
+            clearCompositDisposable()
+        }
     }
 
     override fun onStart() {
@@ -95,6 +103,10 @@ class HomeFragment : Fragment() {
         viewModel.loadMovieList.observe(viewLifecycleOwner) {
             Log.e("loadmoreItem!!", it.toString())
             adapter.onItemsAdd(it)
+        }
+        viewModel.toastMsg.observe(viewLifecycleOwner){
+            Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
+            sharedViewModel.getFavoriteMovieList()
         }
     }
 

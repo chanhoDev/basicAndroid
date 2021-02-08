@@ -25,9 +25,11 @@ interface LocalDataSourceImpl {
     fun onMovieFavoiteGetCall(): Single<List<MovieFavoriteEntity>>
 
     //MovieSearch deleteAll
-    fun onMovieFavoiteDeleteCall(): Completable
+    fun onMovieFavoiteDeleteCall(userId:Int): Completable
 
     //MovieSearch Update
     fun onMovieFavoiteUpdate(movieFavoriteEntity: MovieFavoriteEntity): Completable
+
+    fun isExistMovieFavorite(title:String,director:String):Single<Int>
 
 }

@@ -2,6 +2,8 @@ package com.chanho.basic.di
 
 import android.content.Context
 import androidx.room.Room
+import com.chanho.basic.room.MovieFavoriteDao
+import com.chanho.basic.room.MovieFavoriteDatabase
 import com.chanho.basic.room.MovieSearchDao
 import com.chanho.basic.room.MovieSearchDatabase
 import dagger.Module
@@ -30,6 +32,23 @@ object RoomModule {
     @Provides
     fun provideMovieSearchDAO(movieSearchDatabase: MovieSearchDatabase):MovieSearchDao{
         return movieSearchDatabase.movieSearchDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieFavoritehDb(@ApplicationContext context: Context): MovieFavoriteDatabase {
+        return Room.databaseBuilder(
+            context,
+            MovieFavoriteDatabase::class.java,
+            MovieFavoriteDatabase.DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieFavoriteDAO(movieFavoriteDatabase: MovieFavoriteDatabase):MovieFavoriteDao{
+        return movieFavoriteDatabase.movieFavoriteDao()
     }
 
 }

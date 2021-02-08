@@ -9,10 +9,15 @@ import androidx.lifecycle.ViewModel
 import com.chanho.basic.model.Movie
 import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.repository.Repository
+import com.chanho.basic.room.MovieFavoriteEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
 class HomeViewModel
 @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
+
+    private val compositDisposable = CompositeDisposable()
+
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> = _movieList
 
@@ -24,20 +29,34 @@ class HomeViewModel
 
     val searchText = MutableLiveData<String>()
 
+    private val _toastMsg = MutableLiveData<String>()
+    val toastMsg: LiveData<String> = _toastMsg
+
     private lateinit var reqMovieModel: MovieReqModel
+
+    fun clearCompositDisposable() {
+        compositDisposable.clear()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositDisposable.dispose()
+    }
 
     @SuppressLint("CheckResult")
     fun setSearchText() {
-        repository.getSearchList()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ movieSearch ->
-                Log.e("searchText",movieSearch.toString())
-                if (!movieSearch.isNullOrEmpty()) {
-                    searchText.value = movieSearch[0].search
-                }
-            }, {
-                Log.e("error", it.toString())
-            })
+        compositDisposable.add(
+            repository.getSearchList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ movieSearch ->
+                    Log.e("searchText", movieSearch.toString())
+                    if (!movieSearch.isNullOrEmpty()) {
+                        searchText.value = movieSearch[0].search
+                    }
+                }, {
+                    Log.e("error", it.toString())
+                })
+        )
     }
 
     fun setHomeSearchLayoutVisible(isVisible: Boolean) {
@@ -65,28 +84,74 @@ class HomeViewModel
     @SuppressLint("CheckResult")
     fun getNaverMovieList(isLoadModer: Boolean) {
         Log.e("reqModel", reqMovieModel.toString())
-        repository.getNaverMovieList(reqMovieModel)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                if (response.isSuccessful) {
+        compositDisposable.add(
+            repository.getNaverMovieList(reqMovieModel)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    if (response.isSuccessful) {
 //                    Log.e("successful", response.body()?.items.toString())
-                    response.body()?.items?.let {
-                        for (i in it) {
-                            Log.e("movie = ", i.title.toString())
+                        response.body()?.items?.let {
+                            for (i in it) {
+                                Log.e("movie = ", i.title.toString())
+                            }
+                            Log.e("==========", "======")
                         }
-                        Log.e("==========", "======")
-                    }
-                    if (isLoadModer) {
-                        _loadMovieList.value = response.body()?.items
+                        if (isLoadModer) {
+                            _loadMovieList.value = response.body()?.items
+                        } else {
+                            _movieList.value = response.body()?.items
+                        }
                     } else {
-                        _movieList.value = response.body()?.items
+                        Log.e("fail", response.message().toString())
                     }
-                } else {
-                    Log.e("fail", response.message().toString())
-                }
-            }, { error ->
-                Log.e("fail", error.toString())
-            })
+                }, { error ->
+                    Log.e("fail", error.toString())
+                })
+        )
+
     }
+
+    //영화 아이템 클릭시 이벤트
+    @SuppressLint("CheckResult")
+    fun onItemMovieClicked(movieItem: Movie) {
+        compositDisposable.add(
+            repository.isExistMovieFavorite(movieItem.title ?: "", movieItem.director ?: "")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (it > 0) {
+                        _toastMsg.value = "즐겨찾기에 이미 추가되어있습니다."
+
+                    } else {
+                        onItemMovieFavoriteInsert(movieItem)
+                    }
+                }, {
+                    Log.e("fail", it.toString())
+                })
+        )
+    }
+
+    //즐겨찾기 아이템 입력
+    fun onItemMovieFavoriteInsert(movieItem: Movie) {
+        compositDisposable.add(
+            repository.setMovieFavorite(
+                MovieFavoriteEntity(
+                    title = movieItem.title ?: "",
+                    link = movieItem.link ?: "",
+                    image = movieItem.image ?: "",
+                    subtitle = movieItem.subtitle ?: "",
+                    pubDate = movieItem.pubDate ?: "",
+                    director = movieItem.director ?: "",
+                    actor = movieItem.actor ?: "",
+                    userRating = movieItem.userRating ?: ""
+                )
+            ).observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    _toastMsg.value = "즐겨찾기 추가됨"
+                }, {
+                    _toastMsg.value = "즐겨찾기 추가가 실패했습니다."
+                })
+        )
+    }
+
 
 }

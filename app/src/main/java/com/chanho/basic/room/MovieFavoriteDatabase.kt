@@ -5,10 +5,10 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [MovieFavoriteEntity::class], version = 1,exportSchema = false)
 abstract class MovieFavoriteDatabase : RoomDatabase() {
-    abstract fun movieSearchDao(): MovieSearchDao
+    abstract fun movieFavoriteDao(): MovieFavoriteDao
 
     companion object {
-        val DATABASE_NAME: String = "movie_search_db"
+        val DATABASE_NAME: String = "movie_favorite_db"
 
     }
 }
