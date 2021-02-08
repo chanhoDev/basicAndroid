@@ -14,6 +14,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.chanho.basic.R
 import com.chanho.basic.databinding.ActivityMainBinding
+import com.chanho.basic.ui.favorite.FavoriteFragment
 import com.chanho.basic.ui.home.HomeFragment
 import com.chanho.basic.ui.setting.SettingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 binding.homeViewpager.currentItem = 0
                 return true
             }
-            R.id.page_movie -> {
+            R.id.page_favorite -> {
                 binding.homeViewpager.currentItem = 1
                 return true
             }
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> HomeFragment()
-                1 -> HomeFragment()
+                1 -> FavoriteFragment()
                 2 -> SettingFragment()
                 else -> error("No Fragment")
             }

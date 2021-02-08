@@ -26,7 +26,11 @@ constructor(
                 if (it.isSuccessful) {
                     if (reqModel.start == "1") {
                         getSearchList().subscribe({
-                            deleteAllSearch(reqModel.query)
+                            if(it.size>0){
+                                updateSearch(MovieSearchEntity(0,reqModel.query))
+                            }else{
+                                setMovieSearch(reqModel.query)
+                            }
                             Log.e("resultNaverList", it.size.toString())
                         }, {
                             Log.e("searchlisterror", it.toString())
@@ -47,14 +51,12 @@ constructor(
             .subscribe()
     }
 
-
     @SuppressLint("CheckResult")
     override fun getSearchList(
     ): Single<List<MovieSearchEntity>> {
         return localDataSource.onMovieSearchGetCall()
             .subscribeOn(Schedulers.io())
     }
-
 
     override fun deleteAllSearch(query: String): Disposable {
         return localDataSource.onMovieSearchDeleteAllCall()
@@ -63,6 +65,11 @@ constructor(
             }, {
                 Log.e("error_deleteAll", it.toString())
             })
+    }
+
+    override fun updateSearch(entity: MovieSearchEntity):Disposable {
+        return localDataSource.onMovieSearchUpdate(entity)
+            .subscribeOn(Schedulers.io()).subscribe()
     }
 
 

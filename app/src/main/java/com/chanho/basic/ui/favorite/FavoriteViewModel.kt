@@ -1,4 +1,4 @@
-package com.chanho.basic.ui.home
+package com.chanho.basic.ui.favorite
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -11,7 +11,7 @@ import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.repository.Repository
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-class HomeViewModel
+class FavoriteViewModel
 @ViewModelInject constructor(private val repository: Repository) : ViewModel() {
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> = _movieList
@@ -31,8 +31,7 @@ class HomeViewModel
         repository.getSearchList()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movieSearch ->
-                Log.e("searchText",movieSearch.toString())
-                if (!movieSearch.isNullOrEmpty()) {
+                if(!movieSearch.isNullOrEmpty()){
                     searchText.value = movieSearch[0].search
                 }
             }, {

@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "moviesearch")
 data class MovieSearchEntity (
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    var id:Int?,
+    var id:Int,
 
     @ColumnInfo(name="search")
     var search:String
 ){
-    constructor(search: String):this(null,search)
+    constructor(search: String):this(0,search)
 }

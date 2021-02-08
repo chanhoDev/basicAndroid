@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
-                android:paddingTop="100dp"
+                android:paddingTop="90dp"
                 tools:itemCount="10"
                 tools:listitem="@layout/item_movie" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -50,8 +50,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="2dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/home_search_layout"
@@ -59,7 +58,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp"
                     android:visibility="visible">
 
                     <ImageView

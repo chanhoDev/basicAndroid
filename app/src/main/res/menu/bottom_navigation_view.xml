@@ -8,11 +8,11 @@
         android:icon="@drawable/ic_navigation_home"
         android:title="home"/>
     <item
-        android:id="@+id/page_movie"
+        android:id="@+id/page_favorite"
         android:enabled="true"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_navigation_movie"
-        android:title="movie"/>
+        android:icon="@drawable/ic_navigation_favorite"
+        android:title="favorite"/>
     <item
         android:id="@+id/page_setting"
         android:enabled="true"

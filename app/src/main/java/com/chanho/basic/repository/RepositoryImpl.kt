@@ -12,4 +12,5 @@ interface RepositoryImpl {
     fun setMovieSearch(query: String): Disposable
     fun getSearchList(): Single<List<MovieSearchEntity>>
     fun deleteAllSearch(query: String): Disposable
+    fun updateSearch(entity:MovieSearchEntity):Disposable
 }
