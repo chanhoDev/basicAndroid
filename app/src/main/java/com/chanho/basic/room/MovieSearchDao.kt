@@ -10,7 +10,7 @@ interface MovieSearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovieSearch(movieSearchEntity: MovieSearchEntity): Completable
 
-    @Query("SELECT * FROM moviesearch")
+    @Query("SELECT * FROM movieSearch")
     fun getMovieSearch(): Single<List<MovieSearchEntity>>
 
     @Query("DELETE FROM movieSearch")

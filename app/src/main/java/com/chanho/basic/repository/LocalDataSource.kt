@@ -1,5 +1,6 @@
 package com.chanho.basic.repository
 
+import com.chanho.basic.room.MovieFavoriteEntity
 import com.chanho.basic.room.MovieSearchDao
 import com.chanho.basic.room.MovieSearchEntity
 import io.reactivex.Completable
@@ -24,5 +25,17 @@ class LocalDataSource(
     override fun onMovieSearchUpdate(movieSearchEntity: MovieSearchEntity): Completable {
         return movieSearchDao.updateMovieSearch(movieSearchEntity)
     }
+
+//    override fun onMovieFavoiteInsertCall(movieFavoriteEntity: MovieFavoriteEntity): Completable {
+//    }
+//
+//    override fun onMovieFavoiteGetCall(): Single<List<MovieFavoriteEntity>> {
+//    }
+//
+//    override fun onMovieFavoiteDeleteCall(): Completable {
+//    }
+//
+//    override fun onMovieFavoiteUpdate(movieFavoriteEntity: MovieFavoriteEntity): Completable {
+//    }
 
 }

@@ -25,7 +25,8 @@ constructor(
             .map {
                 if (it.isSuccessful) {
                     if (reqModel.start == "1") {
-                        getSearchList().subscribe({
+                        getSearchList()
+                            .subscribe({
                             if(it.size>0){
                                 updateSearch(MovieSearchEntity(0,reqModel.query))
                             }else{
