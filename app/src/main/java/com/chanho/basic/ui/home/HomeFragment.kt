@@ -1,5 +1,6 @@
 package com.chanho.basic.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chanho.basic.R
 import com.chanho.basic.databinding.FragmentHomeBinding
+import com.chanho.basic.ui.filter.FilterActivity
 import com.chanho.basic.ui.main.MainViewModel
 import com.chanho.basic.util.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,7 +108,7 @@ class HomeFragment : Fragment() {
             adapter.onItemsAdd(it)
         }
         viewModel.onFilterClicked.observe(viewLifecycleOwner) {
-            sharedViewModel.onFilterClicked()
+            startActivity(Intent(context,FilterActivity::class.java))
         }
         viewModel.toastMsg.observe(viewLifecycleOwner){
             Toast.makeText(context,it,Toast.LENGTH_SHORT).show()

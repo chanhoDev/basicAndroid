@@ -9,7 +9,6 @@ import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.observe
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -17,7 +16,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.chanho.basic.R
 import com.chanho.basic.databinding.ActivityMainBinding
 import com.chanho.basic.ui.favorite.FavoriteFragment
-import com.chanho.basic.ui.filter.FilterFragment
 import com.chanho.basic.ui.home.HomeFragment
 import com.chanho.basic.ui.setting.SettingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -52,21 +50,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 oldPosition?.isChecked = true
             }
         })
-//        viewModel.setBottomNavigationVisible(binding.homeBottomNavigationview.isVisible)
         onObserve()
     }
 
     private fun onObserve() {
-//        viewModel.bottomNavigationVisible.observe(this) { isVisible ->
-//            binding.homeBottomNavigationview.isVisible = isVisible
-//        }
-
         viewModel.filterClicked.observe(this) {
-            val manager: FragmentManager = supportFragmentManager
-            val transaction: FragmentTransaction = manager.beginTransaction()
-            transaction.add(R.id.home_container, FilterFragment.newInstance())
-            transaction.addToBackStack(null)
-            transaction.commit()
+
         }
     }
 

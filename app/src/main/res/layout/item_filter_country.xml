@@ -8,13 +8,14 @@
         <variable
             name="pos"
             type="int" />
+
         <variable
             name="vm"
             type="com.chanho.basic.ui.filter.FilterViewModel" />
 
         <variable
             name="model"
-            type="com.chanho.basic.model.Genre" />
+            type="com.chanho.basic.model.Country" />
     </data>
 
     <RelativeLayout
@@ -25,10 +26,10 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{()->vm.onGenreItemClicked(model,pos)}"
+            android:layout_margin="5dp"
+            android:onClick="@{()->vm.onCountryItemClicked(model,pos)}"
             app:cardBackgroundColor="@{model.check==false ? @color/white : @color/teal_200}"
             app:cardCornerRadius="10dp"
-            android:layout_margin="5dp"
             tools:cardBackgroundColor="@color/teal_200">
 
             <RelativeLayout
@@ -41,9 +42,9 @@
                     style="@style/CustomTextViewNanumR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{model.type}"
+                    android:text="@{model.key}"
                     android:textSize="12dp"
-                    tools:text="장르아이템" />
+                    tools:text="국가아이템" />
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
