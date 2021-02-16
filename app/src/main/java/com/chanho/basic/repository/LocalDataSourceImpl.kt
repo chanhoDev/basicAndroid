@@ -30,6 +30,7 @@ interface LocalDataSourceImpl {
     //MovieSearch Update
     fun onMovieFavoiteUpdate(movieFavoriteEntity: MovieFavoriteEntity): Completable
 
+
     fun isExistMovieFavorite(title:String,director:String):Single<Int>
 
 }

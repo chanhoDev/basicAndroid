@@ -4,14 +4,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "moviesearch")
+@Entity(tableName = "movieSearch")
 data class MovieSearchEntity (
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id:Int,
+    var id:Int?,
 
     @ColumnInfo(name="search")
     var search:String
 ){
-    constructor(search: String):this(0,search)
+    constructor(search: String):this(null,search)
 }

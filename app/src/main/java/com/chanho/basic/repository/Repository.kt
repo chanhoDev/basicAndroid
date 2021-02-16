@@ -31,6 +31,7 @@ constructor(
                             if (it.size > 0) {
                                 updateSearch(MovieSearchEntity(0, reqModel.query))
                             } else {
+
                                 setMovieSearch(reqModel.query)
                             }
                             Log.e("resultNaverList", it.size.toString())
