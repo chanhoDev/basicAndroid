@@ -96,6 +96,9 @@ class HomeFragment : Fragment() {
             Log.e("loadmoreItem!!", it.toString())
             adapter.onItemsAdd(it)
         }
+        viewModel.onFilterClicked.observe(viewLifecycleOwner) {
+            sharedViewModel.onFilterClicked()
+        }
     }
 
 

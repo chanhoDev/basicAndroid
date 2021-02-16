@@ -11,9 +11,16 @@ class MainViewModel
 constructor(private val repository: Repository) : ViewModel() {
 
     private val _bottomNavigationVisible = MutableLiveData(true)
-    val bottomNavigationVisible :LiveData<Boolean> = _bottomNavigationVisible
+    val bottomNavigationVisible: LiveData<Boolean> = _bottomNavigationVisible
 
-    fun setBottomNavigationVisible(isVisible:Boolean){
+    private val _filterClicked = MutableLiveData<Unit>()
+    val filterClicked: LiveData<Unit> = _filterClicked
+
+    fun onFilterClicked() {
+        _filterClicked.value = Unit
+    }
+
+    fun setBottomNavigationVisible(isVisible: Boolean) {
         _bottomNavigationVisible.value = isVisible
     }
 

@@ -22,6 +22,9 @@ class HomeViewModel
     private val _homeSearchLayoutVisible = MutableLiveData(true)
     val homeSearchLayoutVisible: LiveData<Boolean> = _homeSearchLayoutVisible
 
+    private val _onFilterClicked = MutableLiveData<Unit>()
+    val onFilterClicked: LiveData<Unit> = _onFilterClicked
+
     val searchText = MutableLiveData<String>()
 
     private lateinit var reqMovieModel: MovieReqModel
@@ -87,6 +90,11 @@ class HomeViewModel
             }, { error ->
                 Log.e("fail", error.toString())
             })
+    }
+
+    //필터 클릭시 이벤트
+    fun onFilterClicked() {
+        _onFilterClicked.value = Unit
     }
 
 }
