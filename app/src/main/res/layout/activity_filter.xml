@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
                 android:paddingStart="20dp"
-                android:text="국"
+                android:text="국가"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filter_genre_recyclerview"/>
