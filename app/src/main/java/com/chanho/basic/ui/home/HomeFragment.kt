@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -45,6 +46,13 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.run {
+            clearCompositDisposable()
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -76,11 +84,12 @@ class HomeFragment : Fragment() {
         })
         binding.homeRecyclerview.addOnScrollListener(object :
             RecyclerViewScrollListener(RecyclerViewScrollListener.LoadMorePosition.TOP) {
-            override fun onLoadMore() {
-                viewModel.setMovieReqModel(false, true)
+            override fun onVisibleFirst() {
+
             }
 
-            override fun onVisibleFirst() {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.setMovieReqModel(false, true)
             }
         })
         viewModel.setSearchText()
@@ -98,6 +107,10 @@ class HomeFragment : Fragment() {
         }
         viewModel.onFilterClicked.observe(viewLifecycleOwner) {
             sharedViewModel.onFilterClicked()
+        }
+        viewModel.toastMsg.observe(viewLifecycleOwner){
+            Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
+            sharedViewModel.getFavoriteMovieList()
         }
     }
 

@@ -18,16 +18,19 @@ interface LocalDataSourceImpl {
     //MovieSearch Update
     fun onMovieSearchUpdate(movieSearchEntity: MovieSearchEntity): Completable
 
-//    //MovieSearch Insert
-//    fun onMovieFavoiteInsertCall(movieFavoriteEntity: MovieFavoriteEntity): Completable
-//
-//    //MovisSearch get
-//    fun onMovieFavoiteGetCall(): Single<List<MovieFavoriteEntity>>
-//
-//    //MovieSearch deleteAll
-//    fun onMovieFavoiteDeleteCall(): Completable
-//
-//    //MovieSearch Update
-//    fun onMovieFavoiteUpdate(movieFavoriteEntity: MovieFavoriteEntity): Completable
+    //MovieSearch Insert
+    fun onMovieFavoiteInsertCall(movieFavoriteEntity: MovieFavoriteEntity): Completable
+
+    //MovisSearch get
+    fun onMovieFavoiteGetCall(): Single<List<MovieFavoriteEntity>>
+
+    //MovieSearch deleteAll
+    fun onMovieFavoiteDeleteCall(userId:Int): Completable
+
+    //MovieSearch Update
+    fun onMovieFavoiteUpdate(movieFavoriteEntity: MovieFavoriteEntity): Completable
+
+
+    fun isExistMovieFavorite(title:String,director:String):Single<Int>
 
 }

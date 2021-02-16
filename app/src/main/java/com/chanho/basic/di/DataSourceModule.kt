@@ -5,6 +5,7 @@ import com.chanho.basic.repository.LocalDataSourceImpl
 import com.chanho.basic.repository.RemoteDataSource
 import com.chanho.basic.repository.RemoteDataSourceImpl
 import com.chanho.basic.retrofit.RetrofitNaverService
+import com.chanho.basic.room.MovieFavoriteDao
 import com.chanho.basic.room.MovieSearchDao
 import dagger.Module
 import dagger.Provides
@@ -27,8 +28,9 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun provideLocalDataSource(
-        movieSearchDao:MovieSearchDao
+        movieSearchDao:MovieSearchDao,
+        movieFavoriteDao: MovieFavoriteDao
     ):LocalDataSourceImpl{
-        return LocalDataSource(movieSearchDao)
+        return LocalDataSource(movieSearchDao,movieFavoriteDao)
     }
 }

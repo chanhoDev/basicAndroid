@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.chanho.basic.model.MovieReqModel
 import com.chanho.basic.model.MovieResModel
+import com.chanho.basic.room.MovieFavoriteEntity
 import com.chanho.basic.room.MovieSearchEntity
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,11 +27,11 @@ constructor(
             .map {
                 if (it.isSuccessful) {
                     if (reqModel.start == "1") {
-                        getSearchList()
-                            .subscribe({
-                            if(it.size>0){
-                                updateSearch(MovieSearchEntity(0,reqModel.query))
-                            }else{
+                        getSearchList().subscribe({
+                            if (it.size > 0) {
+                                updateSearch(MovieSearchEntity(0, reqModel.query))
+                            } else {
+
                                 setMovieSearch(reqModel.query)
                             }
                             Log.e("resultNaverList", it.size.toString())
@@ -68,10 +70,40 @@ constructor(
             })
     }
 
-    override fun updateSearch(entity: MovieSearchEntity):Disposable {
+    override fun updateSearch(entity: MovieSearchEntity): Disposable {
         return localDataSource.onMovieSearchUpdate(entity)
             .subscribeOn(Schedulers.io()).subscribe()
     }
 
+    //즐겨찾기 리스트
+    override fun getMovieFavoriteList(): Single<List<MovieFavoriteEntity>> {
+        return localDataSource.onMovieFavoiteGetCall()
+            .subscribeOn(Schedulers.io())
+    }
 
+    // 즐겨찾기 추가시 기존에 해당 컬럼이 존재하는지 확인
+    @SuppressLint("CheckResult")
+    override fun setMovieFavorite(entity: MovieFavoriteEntity): Completable {
+        return localDataSource.onMovieFavoiteInsertCall(entity)
+            .subscribeOn(Schedulers.io())
+    }
+
+    //즐겨찾기 삭제
+    override fun deleteMovieFavoriteCall(userId: Int): Disposable {
+        return localDataSource.onMovieFavoiteDeleteCall(userId)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    //즐겨찾기 업데이트
+    override fun updateMovieFavorite(entity: MovieFavoriteEntity): Disposable {
+        return localDataSource.onMovieFavoiteUpdate(entity)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    override fun isExistMovieFavorite(title: String, director: String): Single<Int> {
+        return localDataSource.isExistMovieFavorite(title,director)
+            .subscribeOn(Schedulers.io())
+    }
 }

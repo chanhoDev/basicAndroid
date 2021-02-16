@@ -10,6 +10,9 @@ interface MovieFavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovieFavoite(movieFavoriteEntity: MovieFavoriteEntity): Completable
 
+    @Query("SELECT COUNT(*) FROM moviefavorite WHERE title=:title and director=:director")
+    fun isExisteMovieFavorite(title:String,director:String):Single<Int>
+
     @Query("SELECT * FROM moviefavorite")
     fun getMovieFavoite(): Single<List<MovieFavoriteEntity>>
 

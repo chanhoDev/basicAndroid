@@ -44,5 +44,5 @@ data class MovieReqModel(
     var yearto:String?
 
 ){
-    constructor():this("사랑","10","1","","","","")
+    constructor():this("사랑","5","1","","","","")
 }

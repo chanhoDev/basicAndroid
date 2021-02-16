@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chanho.basic.R
 import com.chanho.basic.databinding.FragmentFavoriteBinding
 import com.chanho.basic.ui.main.MainViewModel
-import com.chanho.basic.util.RecyclerViewScrollListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,6 +41,7 @@ class FavoriteFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         binding.vm = viewModel
+        sharedViewModel.getFavoriteMovieList()
         onObserve()
         return binding.root
     }
@@ -69,28 +70,37 @@ class FavoriteFragment : Fragment() {
                 }
             }
         })
-        binding.homeRecyclerview.addOnScrollListener(object :
-            RecyclerViewScrollListener(RecyclerViewScrollListener.LoadMorePosition.TOP) {
-            override fun onLoadMore() {
-                viewModel.setMovieReqModel(false, true)
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
+            ): Boolean {
+//                    final int fromPos = viewHolder.getAdapterPosition();
+//                    final int toPos = viewHolder.getAdapterPosition();
+//                    // move item in `fromPos` to `toPos` in adapter.
+                return true // true if moved, false otherwise
             }
 
-            override fun onVisibleFirst() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+//                Remove swiped item from list and notify the RecyclerView
+                adapter.onDeleteItem(viewHolder.layoutPosition)
             }
-        })
-        viewModel.setSearchText()
+        }
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.homeRecyclerview)
     }
 
     private fun onObserve() {
-        viewModel.movieList.observe(viewLifecycleOwner) {
+        sharedViewModel.movieList.observe(viewLifecycleOwner) {
             Log.e("homeFragment!!", it.toString())
             adapter.onDeleteAll()
             adapter.onItemsAdd(it)
         }
-        viewModel.loadMovieList.observe(viewLifecycleOwner) {
-            Log.e("loadmoreItem!!", it.toString())
-            adapter.onItemsAdd(it)
-        }
+//        sharedViewModel.loadMovieList.observe(viewLifecycleOwner) {
+//            Log.e("loadmoreItem!!", it.toString())
+//            adapter.onItemsAdd(it)
+//        }
     }
 
 
