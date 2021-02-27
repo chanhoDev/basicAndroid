@@ -30,6 +30,9 @@ class HomeViewModel
     private val _onFilterClicked = MutableLiveData<Unit>()
     val onFilterClicked: LiveData<Unit> = _onFilterClicked
 
+    private val _onSearchClicked = MutableLiveData<Unit>()
+    val onSearchClicked: LiveData<Unit> = _onSearchClicked
+
     val searchText = MutableLiveData<String>()
 
     private val _toastMsg = MutableLiveData<String>()
@@ -66,22 +69,22 @@ class HomeViewModel
         _homeSearchLayoutVisible.value = isVisible
     }
 
-    fun setMovieReqModel(isSearch: Boolean, isLoadModer: Boolean) {
-        if (isLoadModer) {
-            reqMovieModel.start =
-                (reqMovieModel.start.toInt() + (reqMovieModel.display.toInt())).toString()
-        } else if (isSearch) {
+    fun setMovieReqModel(page: Int) {//isSearch: Boolean, isLoadModer: Boolean
+        if (page == 0) {
             reqMovieModel = MovieReqModel()
             reqMovieModel.query = searchText.value.toString()
+        } else {
+            reqMovieModel.start = ((page) * Integer.parseInt(reqMovieModel.display) + 1).toString()
         }
-        getNaverMovieList(isLoadModer)
+        getNaverMovieList(page != 0)
     }
 
     fun onSearchBtnClicked() {
         if (searchText.value.isNullOrEmpty()) {
             searchText.value = searchText.value?.trim()
         }
-        setMovieReqModel(true, false)
+        _onSearchClicked.value = Unit
+        setMovieReqModel(0)
     }
 
     @SuppressLint("CheckResult")

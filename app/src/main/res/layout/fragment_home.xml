@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
-                android:paddingTop="120dp"
+                android:paddingTop="100dp"
                 tools:itemCount="10"
                 tools:listitem="@layout/item_movie" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -78,6 +78,16 @@
                         android:paddingVertical="10dp"
                         android:src="@drawable/ic_home_search"
                         android:text="검색" />
+
+                    <ImageView
+                        android:id="@+id/home_filter_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:onClick="@{()->vm.onFilterClicked()}"
+                        android:paddingVertical="10dp"
+                        android:src="@drawable/ic_home_filter"
+                        android:text="검색" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -86,6 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/home_search_layout"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView
@@ -98,16 +109,6 @@
                         android:singleLine="true"
                         android:textSize="15dp"
                         tools:text="기본 필터 적용" />
-
-                    <ImageView
-                        android:id="@+id/home_filter_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:onClick="@{()->vm.onFilterClicked()}"
-                        android:paddingVertical="10dp"
-                        android:src="@drawable/ic_home_filter"
-                        android:text="검색" />
                 </LinearLayout>
             </RelativeLayout>
 

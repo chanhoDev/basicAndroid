@@ -84,23 +84,18 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-        binding.homeRecyclerview.addOnScrollListener(object :
-            RecyclerViewScrollListener(RecyclerViewScrollListener.LoadMorePosition.TOP) {
-            override fun onVisibleFirst() {
-
+        binding.homeRecyclerview.addOnScrollListener(object : RecyclerViewScrollListener() {
+            override fun onLoadMore(currentPage: Int) {
+                viewModel.setMovieReqModel(currentPage)
             }
 
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                viewModel.setMovieReqModel(false, true)
-            }
+
         })
-        viewModel.setSearchText()
     }
 
     private fun onObserve() {
         viewModel.movieList.observe(viewLifecycleOwner) {
             Log.e("homeFragment!!", it.toString())
-            adapter.onDeleteAll()
             adapter.onItemsAdd(it)
         }
         viewModel.loadMovieList.observe(viewLifecycleOwner) {
@@ -108,11 +103,14 @@ class HomeFragment : Fragment() {
             adapter.onItemsAdd(it)
         }
         viewModel.onFilterClicked.observe(viewLifecycleOwner) {
-            startActivity(Intent(context,FilterActivity::class.java))
+            startActivity(Intent(context, FilterActivity::class.java))
         }
-        viewModel.toastMsg.observe(viewLifecycleOwner){
-            Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
+        viewModel.toastMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             sharedViewModel.getFavoriteMovieList()
+        }
+        viewModel.onSearchClicked.observe(viewLifecycleOwner) {
+            adapter.onDeleteAll()
         }
     }
 

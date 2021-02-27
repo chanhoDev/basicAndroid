@@ -71,6 +71,7 @@
                 tools:spanCount="3" />
 
             <TextView
+                android:id="@+id/filter_year_title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/filter_country_recyclerview"
@@ -78,9 +79,21 @@
                 android:textColor="@color/black"
                 android:paddingVertical="10dp"
                 android:textSize="20dp"
-                android:gravity="center_horizontal"
-                />
+                android:paddingStart="20dp"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filter_year_recyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_year_title_tv"
+                tools:itemCount="10"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_filter_genre"
+                tools:spanCount="3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

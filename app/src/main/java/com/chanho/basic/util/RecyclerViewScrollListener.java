@@ -1,23 +1,19 @@
-package com.chanho.basic.util;
 
+package com.chanho.basic.util;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Created by sy-02 on 2018-04-19.
+ */
 
 public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private final int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     private static final String TAG = RecyclerViewScrollListener.class.getSimpleName();
-    int firstVisibleItem, visibleItemCount, totalItemCount, lastVisibleItem;
-    private boolean controlsFirst = true;
+    int firstVisibleItem, visibleItemCount, totalItemCount;
     RecyclerViewPositionHelper mRecyclerViewHelper;
-    private final int currentPage = 1;
-    private final LoadMorePosition mLoadMorePosition;
-
-    public RecyclerViewScrollListener(LoadMorePosition loadMorePosition) {
-        mLoadMorePosition = loadMorePosition;
-    }
+    private int currentPage = 1;
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -26,11 +22,6 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         visibleItemCount = recyclerView.getChildCount();
         totalItemCount = mRecyclerViewHelper.getItemCount();
         firstVisibleItem = mRecyclerViewHelper.findFirstVisibleItemPosition();
-        lastVisibleItem = mRecyclerViewHelper.findLastCompletelyVisibleItemPosition();
-            if (firstVisibleItem == 0) {
-            controlsFirst = true;
-            onVisibleFirst();
-        }
 
         if (loading) {
             if (totalItemCount > previousTotal) {
@@ -38,36 +29,20 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
                 previousTotal = totalItemCount;
             }
         }
-//        if (LoadMorePosition.TOP == mLoadMorePosition) {
-//            if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-//                // End has been reached
-//                // Do something
-//                onLoadMore();
-//                loading = true;
-//            }
-//        } else {
-//            if (!loading && (firstVisibleItem < visibleThreshold)) {
-//                // End has been reached
-//                // Do something
-//                onLoadMore();
-//                loading = true;
-//            }
-//        }
-    }
 
-    public void setPreviousTotal(int previousTotal) {
-        this.previousTotal = previousTotal;
+        if (!loading) {
+            loading = true;
+            onLoadMore(currentPage++);
+        }
+
+        if (totalItemCount == 0) {
+            previousTotal = 0;
+            currentPage = 1;
+        }
     }
 
     //Start loading
-//    public abstract void onLoadMore();
-
-    public abstract void onLoadMore(int page,int totalItemsCount, RecyclerView view);
-
-    public abstract void onVisibleFirst();
-
-    public enum LoadMorePosition {
-        TOP, BOTTOM
-    }
+    public abstract void onLoadMore(int currentPage);
 
 }
+
