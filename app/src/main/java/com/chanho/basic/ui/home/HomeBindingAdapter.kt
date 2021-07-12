@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.chanho.basic.R
 
 @BindingAdapter("type", "remainStates")
@@ -80,8 +82,8 @@ fun setImageUrl(iv: ImageView, url: String?) {
     url?.let {
         Glide.with(iv.context)
             .load(url)
-            .override(100,150)
-            .centerCrop()
+            .override(50,50)
+            .transform(CenterCrop(),RoundedCorners(20))
             .placeholder(R.drawable.ic_image_null)
             .error(R.drawable.ic_image_null)
             .into(iv)

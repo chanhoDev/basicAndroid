@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
-                android:paddingTop="100dp"
+                android:paddingTop="40dp"
                 tools:itemCount="10"
                 tools:listitem="@layout/item_movie" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -39,11 +39,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="20dp"
             android:visibility="@{vm.homeSearchLayoutVisible?View.VISIBLE:View.GONE}"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
