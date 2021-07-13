@@ -3,6 +3,7 @@ package com.chanho.basic.ui.main
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -15,6 +16,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.chanho.basic.R
 import com.chanho.basic.databinding.ActivityMainBinding
+import com.chanho.basic.ui.detail.DetailFragment
 import com.chanho.basic.ui.favorite.FavoriteFragment
 import com.chanho.basic.ui.home.HomeFragment
 import com.chanho.basic.ui.setting.SettingFragment
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         override fun getItemCount(): Int {
             return 3
         }
+
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {

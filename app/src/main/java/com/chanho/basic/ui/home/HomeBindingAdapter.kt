@@ -11,44 +11,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.chanho.basic.R
 
-@BindingAdapter("type", "remainStates")
-fun setRemainCount(tv: TextView, type: Boolean, remainState: String?) {
-    var remainStateText = "충분"
-    var count = "100개 이상"
-    var color = Color.GREEN
-    remainState?.let {
-        when (remainState) {
-            "plenty" -> {
-                remainStateText = "충분"
-                count = "100개 이상"
-                color = Color.GREEN
-            }
-            "some" -> {
-                remainStateText = "여유"
-                count = "30개 이상"
-                color = Color.YELLOW
-            }
-            "few" -> {
-                remainStateText = "매진 임박"
-                count = "2개 이상"
-                color = Color.RED
-            }
-            "empty" -> {
-                remainStateText = "재고 없음"
-                count = "1개 이하"
-                color = Color.GRAY
-            }
-        }
-        if (type) {
-            tv.text = (remainStateText)
-            tv.setTextColor(color)
-        } else {
-            tv.text = (count)
-            tv.setTextColor(color)
-        }
-    }
-}
-
 @BindingAdapter("type", "htmlText")
 fun setHtmlText(tv: TextView, type: String?, text: String) {
     var title: String
@@ -82,10 +44,9 @@ fun setImageUrl(iv: ImageView, url: String?) {
     url?.let {
         Glide.with(iv.context)
             .load(url)
-            .override(50,50)
-            .transform(CenterCrop(),RoundedCorners(20))
-            .placeholder(R.drawable.ic_image_null)
-            .error(R.drawable.ic_image_null)
+            .override(50)
+            .transform(CenterCrop(),RoundedCorners(5))
+            .error(R.drawable.outline_account_box_white_48)
             .into(iv)
     }
 }

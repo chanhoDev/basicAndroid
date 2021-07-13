@@ -76,10 +76,7 @@ class FavoriteFragment : Fragment() {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
             ): Boolean {
-//                    final int fromPos = viewHolder.getAdapterPosition();
-//                    final int toPos = viewHolder.getAdapterPosition();
-//                    // move item in `fromPos` to `toPos` in adapter.
-                return true // true if moved, false otherwise
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {

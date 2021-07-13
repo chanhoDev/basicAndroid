@@ -28,19 +28,16 @@
 
             <ImageView
                 imageUrl="@{item.image}"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
                 android:layout_margin="10dp"
-                android:layout_weight="1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@color/black"
-                android:src="@drawable/ic_image_null" />
+                android:src="@drawable/outline_account_box_white_48" />
 
             <RelativeLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="5"
                 android:paddingHorizontal="10dp">
 
                 <TextView

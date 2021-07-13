@@ -1,5 +1,9 @@
 package com.chanho.basic.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Movie(
     var id: Int?,
     /**
@@ -34,7 +38,7 @@ data class Movie(
      * 	검색 결과 영화에 대한 유저들의 평점이다.
      */
     var userRating: String?
-) {
+) : Parcelable {
     constructor(
         title: String?,
         link: String?,
@@ -45,4 +49,5 @@ data class Movie(
         actor: String?,
         userRating: String?
     ) : this(null, title, link, image, subtitle, pubDate, director, actor, userRating)
+    constructor():this(null,"","","","","","","","")
 }

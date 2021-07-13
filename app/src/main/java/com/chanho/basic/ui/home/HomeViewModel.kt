@@ -27,9 +27,6 @@ class HomeViewModel
     private val _homeSearchLayoutVisible = MutableLiveData(true)
     val homeSearchLayoutVisible: LiveData<Boolean> = _homeSearchLayoutVisible
 
-    private val _onFilterClicked = MutableLiveData<Unit>()
-    val onFilterClicked: LiveData<Unit> = _onFilterClicked
-
     private val _onSearchClicked = MutableLiveData<Unit>()
     val onSearchClicked: LiveData<Unit> = _onSearchClicked
 
@@ -37,6 +34,9 @@ class HomeViewModel
 
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> = _toastMsg
+
+    private val _onItemClicked = MutableLiveData<Movie>()
+    val onItemClicked :LiveData<Movie> = _onItemClicked
 
     private lateinit var reqMovieModel: MovieReqModel
 
@@ -130,6 +130,7 @@ class HomeViewModel
                     } else {
                         onItemMovieFavoriteInsert(movieItem)
                     }
+                    _onItemClicked.value = movieItem
                 }, {
                     Log.e("fail", it.toString())
                 })
@@ -157,11 +158,6 @@ class HomeViewModel
                     _toastMsg.value = "즐겨찾기 추가가 실패했습니다."
                 })
         )
-    }
-
-    //필터 클릭시 이벤트
-    fun onFilterClicked() {
-        _onFilterClicked.value = Unit
     }
 
 }
