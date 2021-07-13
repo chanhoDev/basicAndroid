@@ -112,7 +112,7 @@ class HomeListFragment : Fragment() {
             parentFragmentManager.beginTransaction()
                 .add(R.id.home_container, DetailFragment.newInstance(it), "detail")
                 .addToBackStack("detail")
-                .commit();
+                .commit()
         }
     }
 

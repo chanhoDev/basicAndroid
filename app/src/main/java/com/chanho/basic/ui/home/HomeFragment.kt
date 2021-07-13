@@ -42,13 +42,9 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onStart() {
         super.onStart()
-        parentFragmentManager.beginTransaction().replace(R.id.home_container,HomeListFragment.newInstance()).commit();
+        parentFragmentManager.beginTransaction().replace(R.id.home_container,HomeListFragment.newInstance()).commit()
 
     }
 
